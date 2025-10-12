@@ -30,7 +30,8 @@ from backend.utils import get_agent_response, SYSTEM_PROMPT
 # Configuration helpers
 # -----------------------------------------------------------------------------
 
-DEFAULT_CSV: Path = Path("data/sample_queries.csv")
+# DEFAULT_CSV: Path = Path("data/sample_queries.csv")
+DEFAULT_CSV: Path = Path("data/generated_queries.csv")
 RESULTS_DIR: Path = Path("results")
 RESULTS_DIR.mkdir(exist_ok=True)
 
