@@ -22,7 +22,7 @@ load_dotenv()
 console = Console()
 
 # Model used for the LLM judge
-MODEL_NAME_JUDGE: Final[str] = os.environ.get("MODEL_NAME_JUDGE", "gpt-4o-nano")
+MODEL_NAME_JUDGE: Final[str] = os.environ.get("MODEL_NAME_JUDGE", "gpt-5")
 
 MAX_WORKERS = 32
 

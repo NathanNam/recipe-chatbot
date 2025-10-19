@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Label Recipe Bot traces for dietary adherence using GPT-4o.
+"""Label Recipe Bot traces for dietary adherence using gpt-5.
 
 This script can be used as a powerful automatic labeler to create ground
 truth labels for whether Recipe Bot responses properly adhere to dietary restrictions.
-It uses GPT-4o as a powerful labeler and also comes with a well designed and tested 
+It uses gpt-5 as a powerful labeler and also comes with a well designed and tested 
 labeling prompt.
 
 Remember that automatic creation of ground truth labels should never be used without
@@ -28,7 +28,7 @@ MAX_WORKERS = 32
 
 console = Console()
 
-# Labeling prompt for GPT-4o
+# Labeling prompt for gpt-5
 LABELING_PROMPT = """You are an expert nutritionist and dietary specialist. Your task is to evaluate whether a recipe response properly adheres to the specified dietary restriction.
 
 DIETARY RESTRICTION DEFINITIONS:
@@ -74,7 +74,7 @@ def load_traces(csv_path: str) -> List[Dict[str, Any]]:
     return df.to_dict('records')
 
 def get_labeling_response(query: str, dietary_restriction: str, response: str) -> Optional[Dict[str, Any]]:
-    """Get labeling response from GPT-4o."""
+    """Get labeling response from gpt-5."""
     try:
         prompt = LABELING_PROMPT.format(
             query=query,
@@ -83,9 +83,9 @@ def get_labeling_response(query: str, dietary_restriction: str, response: str) -
         )
         
         completion = litellm.completion(
-            model="gpt-4o",
+            model="gpt-5",
             messages=[{"role": "user", "content": prompt}],
-            temperature=0
+            temperature=1
         )
         
         response_text = completion.choices[0].message.content.strip()
@@ -115,7 +115,7 @@ def get_labeling_response(query: str, dietary_restriction: str, response: str) -
         return None
 
 def label_single_trace(trace: Dict[str, Any]) -> Dict[str, Any]:
-    """Label a single trace using GPT-4o."""
+    """Label a single trace using gpt-5."""
     query = trace["query"]
     dietary_restriction = trace["dietary_restriction"]
     response = trace["response"]
@@ -144,7 +144,7 @@ def label_single_trace(trace: Dict[str, Any]) -> Dict[str, Any]:
 def label_traces(traces: List[Dict[str, Any]], 
                 sample_size: int = 150, 
                 max_workers: int = MAX_WORKERS) -> List[Dict[str, Any]]:
-    """Label a sample of traces using GPT-4o with parallel processing."""
+    """Label a sample of traces using gpt-5 with parallel processing."""
     # Sample traces for labeling
     if len(traces) > sample_size:
         sampled_traces = random.sample(traces, sample_size)
@@ -159,7 +159,7 @@ def label_traces(traces: List[Dict[str, Any]],
         future_to_trace = {executor.submit(label_single_trace, trace): trace for trace in sampled_traces}
         
         # Process completed tasks with progress tracking
-        with console.status("[yellow]Labeling traces with GPT-4o in parallel...") as status:
+        with console.status("[yellow]Labeling traces with gpt-5 in parallel...") as status:
             completed = 0
             total = len(sampled_traces)
             
@@ -223,8 +223,8 @@ def main():
     console.print(f"[green]Loaded {len(traces)} traces")
     
     # Label traces with parallel processing
-    console.print("[yellow]Labeling traces with GPT-4o using parallel processing...")
-    labeled_traces = label_traces(traces, sample_size=200, max_workers=MAX_WORKERS)  # Label more than needed
+    console.print("[yellow]Labeling traces with gpt-5 using parallel processing...")
+    labeled_traces = label_traces(traces, sample_size=400, max_workers=MAX_WORKERS)  # Label more than needed
     
     # Balance the dataset
     balanced_traces = balance_labels(labeled_traces, target_positive=75, target_negative=75)

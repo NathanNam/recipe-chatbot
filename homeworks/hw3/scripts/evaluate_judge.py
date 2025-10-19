@@ -23,7 +23,7 @@ MAX_WORKERS = 32
 console = Console()
 
 # Model used for the LLM judge
-MODEL_NAME_JUDGE: Final[str] = os.environ.get("MODEL_NAME_JUDGE", "gpt-4o-nano")
+MODEL_NAME_JUDGE: Final[str] = os.environ.get("MODEL_NAME_JUDGE", "gpt-5")
 
 def load_data_split(csv_path: str) -> List[Dict[str, Any]]:
     """Load a data split from CSV file."""
